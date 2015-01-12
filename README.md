@@ -1,4 +1,4 @@
-### Tuts+ Tutorial: How to Integrate “No CAPTCHA reCAPTCHA” on Your Website
+### Tuts+ Tutorial: How to Integrate “No CAPTCHA reCAPTCHA” in Your Website
 #### Instructor: Ian Yates
 
 In this tutorial we’ll introduce Google’s new No CAPTCHA form security, then integrate it into a web page using PHP.
