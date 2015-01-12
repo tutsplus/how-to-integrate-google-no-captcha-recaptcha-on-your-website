@@ -4,7 +4,7 @@
 require_once "recaptchalib.php";
 
 // your secret key
-$secret = "6LdbMwATAAAAALwS6_u6mAL0o9oQAJbGSg5GgLQJ";
+$secret = "0000000000000000000000000000000000";
 
 // empty response
 $response = null;
@@ -50,7 +50,7 @@ if ($_POST["g-recaptcha-response"]) {
       <label for="email">Email:</label>
       <input name="email" type="email" required><br />
 
-      <div class="g-recaptcha" data-sitekey="6LdbMwATAAAAAGdw7X0ac4mdxub6HHrAXpgEEijT"></div>
+      <div class="g-recaptcha" data-sitekey="11111111111111111111111111111111111"></div>
 
       <input type="submit" value="Submit" />
 
