@@ -110,7 +110,7 @@ class ReCaptcha
         if ($response == null || strlen($response) == 0) {
             $recaptchaResponse = new ReCaptchaResponse();
             $recaptchaResponse->success = false;
-            $recaptchaResponse->errorCodes = 'missing-input';
+            $recaptchaResponse->errorCodes[] = 'missing-input';
             return $recaptchaResponse;
         }
 
@@ -130,7 +130,11 @@ class ReCaptcha
             $recaptchaResponse->success = true;
         } else {
             $recaptchaResponse->success = false;
-            $recaptchaResponse->errorCodes = $answers [error-codes];
+            if (array_key_exists('error-codes', $answers)) {
+				$recaptchaResponse->errorCodes = $answers['error-codes'];
+            } else {
+				$recaptchaResponse->errorCodes[] = 'unknown-error';
+            }
         }
 
         return $recaptchaResponse;
