@@ -30,15 +30,6 @@
  * THE SOFTWARE.
  */
 
-/**
- * A ReCaptchaResponse is returned from checkAnswer().
- */
-class ReCaptchaResponse
-{
-    public $success;
-    public $errorCodes;
-}
-
 class ReCaptcha
 {
     private static $_signupUrl = "https://www.google.com/recaptcha/admin";
@@ -46,13 +37,12 @@ class ReCaptcha
         "https://www.google.com/recaptcha/api/siteverify?";
     private $_secret;
     private static $_version = "php_1.0";
-
     /**
      * Constructor.
      *
      * @param string $secret shared secret between site and ReCAPTCHA server.
      */
-    function ReCaptcha($secret)
+    function __construct($secret)
     {
         if ($secret == null || $secret == "") {
             die("To use reCAPTCHA you must get an API key from <a href='"
@@ -74,12 +64,10 @@ class ReCaptcha
         foreach ($data as $key => $value) {
             $req .= $key . '=' . urlencode(stripslashes($value)) . '&';
         }
-
         // Cut the last '&'
         $req=substr($req, 0, strlen($req)-1);
         return $req;
     }
-
     /**
      * Submits an HTTP GET to a reCAPTCHA server.
      *
@@ -94,7 +82,6 @@ class ReCaptcha
         $response = file_get_contents($path . $req);
         return $response;
     }
-
     /**
      * Calls the reCAPTCHA siteverify API to verify whether the user passes
      * CAPTCHA test.
@@ -108,12 +95,9 @@ class ReCaptcha
     {
         // Discard empty solution submissions
         if ($response == null || strlen($response) == 0) {
-            $recaptchaResponse = new ReCaptchaResponse();
-            $recaptchaResponse->success = false;
-            $recaptchaResponse->errorCodes = 'missing-input';
-            return $recaptchaResponse;
-        }
 
+            return array("success"=> false, "errorCodes"=>"missing-input", "hostname"=>"", "challenge_ts" =>"");
+        }
         $getResponse = $this->_submitHttpGet(
             self::$_siteVerifyUrl,
             array (
@@ -124,17 +108,14 @@ class ReCaptcha
             )
         );
         $answers = json_decode($getResponse, true);
-        $recaptchaResponse = new ReCaptchaResponse();
-
+        $recaptchaResponse = array("hostname"=>$answers["hostname"], "challenge_ts" =>$answers["challenge_ts"], "errorCodes"=>"");
         if (trim($answers ['success']) == true) {
-            $recaptchaResponse->success = true;
+            $recaptchaResponse["success"] = true;
         } else {
-            $recaptchaResponse->success = false;
-            $recaptchaResponse->errorCodes = $answers [error-codes];
+            $recaptchaResponse["success"] = false;
+            $recaptchaResponse["errorCodes"] = $answers ["error-codes"];
         }
-
         return $recaptchaResponse;
     }
 }
-
 ?>
